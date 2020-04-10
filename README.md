@@ -2,7 +2,7 @@
 
 Projeto de exemplo apresentado na [FiqueEmCasaConf](https://github.com/linuxtips/FiqueEmCasaConf).
 
-Slides em []().
+Slides em [slides.com/regissilva/fique-em-casa-conf](https://slides.com/regissilva/fique-em-casa-conf).
 
 ## Este projeto foi feito com:
 
