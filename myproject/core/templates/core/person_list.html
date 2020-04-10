@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Contatos{% endblock title %}
+
+{% block content %}
+
+<form class="navbar-form navbar-right" action="." method="get">
+    <!-- add -->
+    <a href="{% url 'core:person_add' %}">
+        <button id="new" type="button" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Adicionar
+        </button>
+    </a>
+    <!-- search form -->
+    <div class="form-group">
+      <input id="search_box" name="search_box" type="text" placeholder="Localizar..." class="form-control">
+      <button type="submit" class="btn btn-success form-control"><span class="glyphicon glyphicon-search"></span></button>
+  </div>
+</form>
+
+<div class="page-header">
+<h2><h2><i class="fa fa-user"></i> Lista de Contatos</h2>
+</div>
+
+<div>
+{% if person_list %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>UF</th>
+        <th>Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for person in person_list %}
+      <tr>
+        <td><a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a></td>
+        <td>{{ person.email }}</td>
+        {% if person.phone_set.first %}
+          <td>{{ person.phone_set.first }} 
+            {% if person.phone_set.count > 1 %}
+              <a href="{{ person.get_absolute_url }}">+{{ person.phone_set.count|add:"-1" }}</a>
+            {% endif %}
+          </td>
+        {% else %}
+          <td>---</td>
+        {% endif %}
+        <td>{{ person.get_uf_display }}</td>
+        <td>
+          {% if person.photo %}
+            <img src="{{ person.photo.url }}" alt="person.photo.name" width="100px">
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p class="alert alert-warning">Sem itens na lista.</p>
+{% endif %}
+</div>
+
+<hr>
+<div>
+<h4><b>Total:</b> {{ page_obj.paginator.count }} contato{{ page_obj.paginator.count|pluralize }}</h4>
+</div>
+
+{% include "pagination.html" %}
+
+{% endblock content %}

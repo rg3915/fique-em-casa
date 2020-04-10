@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Despesas{% endblock title %}
+
+{% block content %}
+
+<style>
+  body {
+    padding-top: 0;
+  }
+</style>
+
+<div class="page-header">
+<h2><i class="fa fa-list"></i> Despesas</h2>
+</div>
+
+<div>
+{% if object_list %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Valor</th>
+        <th>Comprovante</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.person }}</td>
+        <td>R$ {{ object.value }}</td>
+        <td>
+          {% if object.image %}
+            <img src="{{ object.image.url }}" alt="object.image.name" width="100px">
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>TOTAL</td>
+        <td><b>R$ {{ total }}</b></td>
+      </tr>
+    </tfoot>
+  </table>
+{% else %}
+  <p class="alert alert-warning">Sem itens na lista.</p>
+{% endif %}
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('.navbar').remove();
+    $('#footer').remove();
+  });
+
+  window.onload = function () {
+    window.print();
+
+    setTimeout(() => {
+      window.close();
+    }, 2000);
+  };
+</script>
+
+{% endblock content %}

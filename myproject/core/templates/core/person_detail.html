@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Person Detail{% endblock title %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+  <li><a href="{% url 'core:home' %}">Home</a> <span class="divider"></span></li>
+  <li><a href="{% url 'core:person_list' %}">Contatos</a> <span class="divider"></span></li>
+  <li class="active">{{ object.full_name }}</li>
+</ul>
+
+<div class="col-lg-8">
+  <div class="col-md-2 column">
+    {% if object.photo %}
+      <img src="{{ object.photo.url }}" alt="{{ object.photo.name }}" width="100px">
+    {% else %}
+      <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png" class="img-square" style="height: 100px;" />
+    {% endif %}
+  </div>
+  <div class="col-md-offset-3 column">
+    <h1>{{ object.full_name }}</h1>
+    {% if object.email %}
+      <h4><span class="glyphicon glyphicon-envelope"></span><a href="#"> {{ object.email }}</a></h4>
+    {% endif %}
+    <div class="social">
+      <ul>
+        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+        <li><a href="#"><i class="fa fa-github"></i></a></li>
+        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+        <li><a href="#"><i class="fa fa-skype"></i></a></li>
+        <li><a href="#"><i class="fa fa-slack"></i></a></li>
+      </ul>
+    </div>
+  </div>
+
+  </br>
+
+  <table class="table table-user-information">
+    <tbody>
+      {% if object.phone_set.all %}
+        {% for phone in object.phone_set.all %}
+          <tr>
+            <th class="col-md-3 text-right"><span class="glyphicon glyphicon-earphone"></span></th>
+            <td>{{ phone.phone }} <i class="fa fa-whatsapp ok"></i> {{ phone.get_phone_type_display }}</td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <th class="col-md-3 text-right"><span class="glyphicon glyphicon-earphone"></span></th>
+          <td>---</td>
+        </tr>
+      {% endif %}
+
+      {% if object.address %}
+        <tr>
+          <th class="col-md-3 text-right"><span class="glyphicon glyphicon-map-marker"></span></th>
+          <td>{{ object.address }}
+            {% if object.complement %} - {{ object.complement }}{% endif %}
+            {% if object.district %} - {{ object.district }}{% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th class="col-md-3 text-right"></th>
+          <td>
+            {% if object.city %}{{ object.city }}{% endif %}
+            {% if object.uf %} - {{ object.uf }}{% endif %}
+            {% if object.cep %} - {{ object.cep }}{% endif %}
+          </td>
+        </tr>
+      {% endif %}
+      <tr>
+        <th class="col-md-3 text-right">Bloqueado</th>
+          <td><span class="glyphicon {{ object.blocked|yesno:'glyphicon-ok-sign ok,glyphicon-minus-sign no'}}"></span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  <!-- edit -->
+  <a href="{% url 'core:person_edit' person.pk %}">
+      <button id="edit_person" type="button" class="btn btn-success">
+          <span class="fa fa-pencil"></span> Editar
+      </button>
+  </a>
+  <!-- delete with modal -->
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+      <span class="fa fa-times"></span> Excluir
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+      </div>
+        <form action="{% url 'core:person_delete' person.id %}" method="POST">
+      <div class="modal-body">
+          {% csrf_token %}
+          Deseja mesmo deletar "{{ object }}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        <input type="submit" class="btn btn-danger" value="Deletar" />
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
