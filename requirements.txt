@@ -3,7 +3,7 @@ django-daterange-filter==1.3.0
 django-extensions==2.2.9
 django-localflavor==3.0.1
 django-widget-tweaks==1.4.8
-Django==2.2.12
+Django==2.2.18
 Pillow==7.1.1
 python-decouple==3.3
 python-stdnum==1.13
